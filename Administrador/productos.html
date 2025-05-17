@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  <link rel="stylesheet" href="..\CSS\estilo.css">
+  <link rel="icon" type="image/png" href="..\img\2.png">
+  <title>Administrador - Panadería</title>
+
+  <nav class="navbar">
+    <div class="logo-container">
+    <img src="..\img\logo.png" alt="logotipo" width="75" height="60"> 
+    <p>Pancito</p></div>
+        
+    <ul class="listp">
+        <li>
+            <a class="listpa" href="productos.html" style="font-weight: bold">Productos</a>
+          </li>
+    <li>
+      <a class="listpa" href="ventas.html" >Venta</a>
+    </li>
+    <li>
+      <a class="listpa" href="informes.html">Inventario</a>
+    </li>
+      <li>
+          <a class="listpa"  href="empleados.html">Empleados</a>
+      </li>
+      <li>
+          <a class="listpa" href="eventos.html">Eventos</a></li>
+    
+     <div class="dropdown">
+            <button class="dropbtn">Usuario ▼</button>
+            <div class="dropdown-content">
+                <a href="..\Inicio\inicio.html">Cerrar sesión</a>
+            </div>
+        </ul>
+
+</nav>
+</head>
+<body>
+  <div class="container">
+    <p class="titulo">Productos</p></div>
+    
+    <!-- Buscador -->
+    <center>
+      <input type="text" class="form-control mb-4" id="buscador" placeholder="Buscar producto...">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">Agregar producto</button>
+      </center>
+      
+    <!-- Contenedor para productos -->
+    <div id="contenedorProductos" class="row justify-content-center gap-4"></div>
+  </div>
+
+  <!-- Modal de ingredientes -->
+  <div class="modal fade" id="modalIngredientes" tabindex="-1" aria-labelledby="modalIngredientesLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalIngredientesLabel">Ingredientes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body" id="listaIngredientes">
+          <!-- Aquí se insertarán los ingredientes -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="formProducto" action="../php/agregar_producto.php" method="POST" enctype="multipart/form-data">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalProductoLabel">Agregar producto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="imagen" class="form-label">Imagen</label>
+                <input type="text" class="form-control" name="imagen" placeholder="Nombre de la imagen y extensión" required=".jpg">
+              </div>
+              <div class="col-md-6">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" name="nombre" required>
+              </div>
+              <div class="col-md-12">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" name="descripcion" rows="2"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label for="precio" class="form-label">Precio</label>
+                <input type="number" class="form-control" name="precio" required>
+              </div>
+              <div class="col-md-4">
+                <label for="stock_min" class="form-label">Stock mínimo</label>
+                <input type="number" class="form-control" name="stock_min" required>
+              </div>
+              <div class="col-md-4">
+                <label for="stock_max" class="form-label">Stock máximo</label>
+                <input type="number" class="form-control" name="stock_max" required>
+              </div>
+              <div class="col-md-6" id="tipoProducto">
+                <label for="id_tipo" class="form-label">Tipo de producto</label>
+                <select class="form-select" id="id_tipo" name="id_tipo" required>
+
+                  <option value="">Selecciona un tipo</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="receta" class="form-label">Receta</label>
+                <textarea class="form-control" name="receta" required></textarea>
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label">Ingredientes</label>
+                <div id="ingredientes">
+                  <div class="row mb-2">
+                    <div class="col-md-6">
+                      <input type="text" name="ingredientes[]" class="form-control" placeholder="Nombre del ingrediente" required>
+                    </div>
+                    <div class="col-md-4">
+                      <input type="number" name="cantidades[]" class="form-control" placeholder="Cantidad (mg)" required>
+                    </div>
+                    <div class="col-md-2">
+                      <button type="button" class="btn btn-danger" onclick="eliminarIngrediente(this)">✕</button>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="agregarIngrediente()">+ Añadir ingrediente</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalProductoEditar" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formProductoEditar" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+            <input type="hidden" name="imagen_actual" id="imagen_actual">
+            <!-- Aquí van los inputs como nombre, precio, receta, etc. -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    window.onload = function () {
+      fetch('../php/obtener_productos.php')
+        .then(res => res.json())
+        .then(data => mostrarProductos(data));
+
+       cargarTiposProducto(); 
+    }
+
+    function mostrarProductos(productos) {
+      const contenedor = document.getElementById('contenedorProductos');
+      contenedor.innerHTML = '';
+      productos.forEach(prod => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style = 'width: 18rem;';
+        card.innerHTML = `
+            <img src="../img/${prod.imagen}" class="card-img-top" alt="${prod.nombre}" style="width: 100%; height: 200px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title">${prod.nombre}</h5>
+            <p class="card-text">${prod.descripcion}</p>
+            <p class="card-text"><strong>$${prod.precio}</strong></p>
+            <button class="btn btn-primary" onclick="verIngredientes(${prod.id_producto})">Ver Ingredientes</button>
+            <button class="btn btn-secondary" onclick="crearPDF(${prod.id_producto}, '${prod.nombre}')">Descargar receta PDF</button>
+            <button class="btn btn-danger" onclick="eliminarProducto(${prod.id_producto})">Eliminar</button>
+            <button class="btn btn-warning" onclick="editarProducto(${prod.id_producto})">Editar</button>
+
+            </div>
+          `;
+          contenedor.appendChild(card);
+          });
+        }
+
+        function eliminarProducto(idProducto) {
+  if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+    fetch(`../php/eliminar_producto.php`, {
+  method: 'DELETE',
+  body: new URLSearchParams({ id_producto: idProducto })
+})
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Producto eliminado con éxito.');
+          location.reload(); 
+        } else {
+          alert('Error al eliminar el producto: ' + data.error);
+        }
+      })
+      .catch(error => console.error('Error al eliminar el producto:', error));
+  }
+}
+
+
+        function editarProducto(idProducto) {
+  fetch(`../php/obtener_producto.php?id_producto=${idProducto}`)
+    .then(res => res.json())
+    .then(producto => {
+      const form = document.getElementById('formProducto');
+      form.action = `../php/editar_producto.php?id_producto=${idProducto}`;
+      form.nombre.value = producto.nombre;
+      form.descripcion.value = producto.descripcion;
+      form.precio.value = producto.precio;
+      form.stock_min.value = producto.stock_min;
+      form.stock_max.value = producto.stock_max;
+      form.id_tipo.value = producto.id_tipo;
+      form.receta.value = producto.receta;
+      form.imagen.value = ''; // limpia input file
+
+
+      // Stock opcional
+      if (form.stock) {
+        form.stock.value = producto.stock;
+      }
+
+      // Ingredientes
+      const ingredientesDiv = document.getElementById('ingredientes');
+      ingredientesDiv.innerHTML = '';
+      producto.ingredientes.forEach(ingrediente => {
+        const row = document.createElement('div');
+        row.className = 'row mb-2';
+        row.innerHTML = `
+          <div class="col-md-6">
+            <input type="text" name="ingredientes[]" class="form-control" value="${ingrediente.nombre}" required>
+          </div>
+          <div class="col-md-4">
+            <input type="number" name="cantidades[]" class="form-control" value="${ingrediente.cantidad}" required>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-danger" onclick="eliminarIngrediente(this)">✕</button>
+          </div>
+        `;
+        ingredientesDiv.appendChild(row);
+      });
+
+      const modal = new bootstrap.Modal(document.getElementById('modalProducto'));
+      modal.show();
+      const respuesta = typeof res === "string" ? JSON.parse(res) : res;
+        if (respuesta.success) {
+        alert("Venta registrada con éxito.");}
+    })
+    .catch(error => console.error('Error al obtener el producto:', error));
+}
+
+
+        function crearPDF(idProducto, nombre) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  fetch(`../php/obtener_receta.php?id_producto=${idProducto}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      const logo = new Image();
+      logo.src = "../img/logo.png";
+
+      logo.onload = () => {
+        doc.addImage(logo, "PNG", 10, 10, 30, 30);
+        doc.setFontSize(18);
+        doc.text("Panadería Pancito", 50, 25);
+
+        doc.setFontSize(16);
+        doc.text(`Receta del Producto: ${nombre}`, 10, 50);
+
+        // Imagen del producto
+        const nombreArchivo = nombre.toLowerCase().replace(/\s+/g, '_').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const imgProducto = new Image();
+        imgProducto.src = `../img/${nombreArchivo}.jpg`;
+
+        imgProducto.onload = () => {
+          doc.addImage(imgProducto, "PNG", 150, 10, 40, 40);
+          generarContenido();
+        };
+
+        imgProducto.onerror = () => {
+          // Si la imagen no carga, aún se genera el PDF
+          generarContenido();
+        };
+
+        function generarContenido() {
+          // Ingredientes
+          doc.setFontSize(14);
+          doc.text("Ingredientes:", 10, 65);
+
+          data.ingredientes.forEach((ing, index) => {
+            const texto = `- ${ing.nombre_ingrediente}: ${ing.cantidad_utilizada_mg} ${ing.unidad_medida}`;
+            doc.text(texto, 10, 75 + index * 10);
+          });
+
+          // Receta
+          const yReceta = 85 + data.ingredientes.length * 10;
+          doc.setFontSize(14);
+          doc.text("Preparación:", 10, yReceta);
+          doc.setFontSize(12);
+          doc.text(data.receta.descripcion, 10, yReceta + 10, { maxWidth: 180 });
+
+          // Guardar PDF
+          doc.save(`receta_producto_${nombre}.pdf`);
+        }
+      };
+    });
+}
+
+
+
+    // Ver ingredientes (mostrar modal)
+    function verIngredientes(idProducto) {
+      fetch(`../php/obtener_ingredientes.php?id_producto=${idProducto}`)
+        .then(res => res.json())
+        .then(data => {
+          const lista = document.getElementById('listaIngredientes');
+          lista.innerHTML = '<ul class="list-group">' +
+            data.map(i => `<li class="list-group-item">${i.nombre} </li>`).join('') +
+            '</ul>';
+          const modal = new bootstrap.Modal(document.getElementById('modalIngredientes'));
+          modal.show();
+        });
+    }
+
+    //Tipo de producto
+    function cargarTiposProducto() {
+  fetch('../php/obtener_tipos_productos.php')
+    .then(res => res.json())
+    .then(data => {
+      const select = document.getElementById('id_tipo');
+      select.innerHTML = '<option value="">Selecciona un tipo</option>';
+      data.forEach(tipo => {
+        const option = document.createElement('option');
+        option.value = tipo.id_tipo;
+        option.textContent = tipo.nombre;
+        select.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Error al cargar los tipos de producto:', error));
+}
+
+    function eliminarIngrediente(boton) {
+      boton.closest('.row').remove();
+    }
+
+
+    // Buscador en tiempo real
+    document.getElementById('buscador').addEventListener('input', function () {
+      const filtro = this.value.toLowerCase();
+      const cards = document.querySelectorAll('#contenedorProductos .card');
+      cards.forEach(card => {
+        const titulo = card.querySelector('.card-title').textContent.toLowerCase();
+        card.style.display = titulo.includes(filtro) ? '' : 'none';
+      });
+    });
+
+    function agregarIngrediente() {
+  const contenedor = document.getElementById('ingredientes');
+  const nuevaFila = document.createElement('div');
+  nuevaFila.className = 'row mb-2';
+  nuevaFila.innerHTML = `
+    <div class="col-md-6">
+      <input type="text" name="ingredientes[]" class="form-control" placeholder="Nombre del ingrediente" required>
+    </div>
+    <div class="col-md-4">
+      <input type="number" name="cantidades[]" class="form-control" placeholder="Cantidad (mg)" required>
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-danger" onclick="eliminarIngrediente(this)">✕</button>
+    </div>
+  `;
+  contenedor.appendChild(nuevaFila);
+} </script>
+
+ </body>
+</html>

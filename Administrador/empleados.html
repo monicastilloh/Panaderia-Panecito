@@ -1,0 +1,255 @@
+<!-- Botón para abrir el modal de agregar empleado -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" type="image/png" href="..\img\2.png">
+    <link rel="stylesheet" href="..\CSS\estilo.css">
+    <title>Administrador - Panadería</title>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo-container">
+        <img src="..\img\logo.png" alt="logotipo" width="75" height="60"> 
+        <p>Pancito</p></div>
+            
+        <ul class="listp">
+            <li>
+                <a class="listpa" href="productos.html" >Productos</a>
+              </li>
+        <li>
+          <a class="listpa" href="ventas.html">Venta</a>
+        </li>
+        <li>
+          <a class="listpa" href="informes.html">Inventario</a>
+        </li>
+          <li>
+              <a class="listpa"  href="empleados.html" style="font-weight: bold">Empleados</a>
+          </li>
+          <li>
+              <a class="listpa" href="eventos.html">Eventos</a></li>
+        
+         <div class="dropdown">
+                <button class="dropbtn">Usuario ▼</button>
+                <div class="dropdown-content">
+                    <a href="..\Inicio\inicio.html">Cerrar sesión</a>
+                </div>
+            </ul>
+    
+    </nav>
+    <div class="container text-center">
+      <p class="titulo">Lista de Empleados</p>
+
+      <div class="text-center mt-3"></div>
+    <div class="text-center mt-3"></div>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarEmpleado" disabled>
+        Agregar Empleado
+      </button>
+    </div>
+
+    <!-- Modal para agregar empleado -->
+    <div class="modal fade" id="modalAgregarEmpleado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAgregarEmpleadoLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <form id="formAgregarEmpleado">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalAgregarEmpleadoLabel">Agregar Empleado</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+              </div>
+              <div class="mb-3">
+                <label for="apellido_pat" class="form-label">Apellido Paterno</label>
+                <input type="text" class="form-control" id="apellido_pat" name="apellido_pat" required>
+              </div>
+              <div class="mb-3">
+                <label for="apellido_mat" class="form-label">Apellido Materno</label>
+                <input type="text" class="form-control" id="apellido_mat" name="apellido_mat" required>
+              </div>
+              <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" name="telefono" required>
+              </div>
+              <div class="mb-3">
+                <label for="rfc" class="form-label">RFC</label>
+                <input type="text" class="form-control" id="rfc" name="RFC" required>
+              </div>
+              <div class="mb-3">
+                <label for="correo" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="correo" name="correo" required>
+              </div>
+              <div class="mb-3">
+                <label for="codigo_postal" class="form-label">Código Postal</label>
+                <input type="text" class="form-control" id="codigo_postal" name="codigo_postal" required>
+              </div>
+              <div class="mb-3">
+                <label for="calle" class="form-label">Calle</label>
+                <input type="text" class="form-control" id="calle" name="calle" required>
+              </div>
+              <div class="mb-3">
+                <label for="numero" class="form-label">Número</label>
+                <input type="number" class="form-control" id="numero" name="numero" required>
+              </div>
+              <div class="mb-3">
+                <label for="id_colonia" class="form-label">Colonia</label>
+                <input type="text" class="form-control" id="id_colonia" name="id_colonia">
+              </div>
+              <div class="mb-3">
+                <label for="id_estado" class="form-label">Estado</label>
+                <input type="text" class="form-control" id="id_estado" name="id_estado">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="tipo_empleado" class="form-label">Tipo de Empleado</label>
+              <select class="form-select" id="tipo_empleado" name="tipo_empleado" required>
+                <option value="" disabled selected>Seleccione un tipo</option>
+                <option value="1">Administrador</option>
+                <option value="2">Panadero</option>
+                <option value="3">Cajero</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Agregar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="cont">
+      <div class="list-group">
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalEditarEmpleado" tabindex="-1" aria-labelledby="editarEmpleadoLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form id="formEditarEmpleado">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editarEmpleadoLabel">Editar Empleado</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="edit-id_empleado" name="id_empleado">
+              <div class="mb-3">
+                <label for="edit-nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="edit-nombre" name="nombre" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-apellido_pat" class="form-label">Apellido Paterno</label>
+                <input type="text" class="form-control" id="edit-apellido_pat" name="apellido_pat" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-apellido_mat" class="form-label">Apellido Materno</label>
+                <input type="text" class="form-control" id="edit-apellido_mat" name="apellido_mat" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="edit-telefono" name="telefono" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-rfc" class="form-label">RFC</label>
+                <input type="text" class="form-control" id="edit-rfc" name="RFC" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-correo" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="edit-correo" name="correo" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $.get('../php/obtener_empleados.php', function (data) {
+          const empleados = JSON.parse(data);
+          let html = '';
+          empleados.forEach(emp => {
+            html += `
+            <div class="list-group-item">
+              <div class="d-flex w-100 justify-content-between align-items-center">
+                <div>
+                  <h5 class="mb-1">${emp.nombre} ${emp.apellido_pat} ${emp.apellido_mat}</h5>
+                  <small class="text-muted">${emp.puesto || 'Sin puesto'}</small>
+                  <p class="mb-1">Sueldo: ${emp.sueldo || ''}</p>
+                  <p class="mb-1">RFC: ${emp.RFC} | Tel: ${emp.telefono}</p>
+                  <small>${emp.correo}</small><br>
+                  <small>Dirección: ${emp.calle || ''} ${emp.numero || ''}, ${emp.colonia || ''}, ${emp.estado || ''}</small>
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-warning me-2" onclick="editarEmpleado(${emp.id_empleado})">Editar</button>
+                  <button class="btn btn-sm btn-danger" onclick="eliminarEmpleado(${emp.id_empleado})">Eliminar</button>
+                </div>
+              </div>
+            </div>`;
+          });
+          $('.list-group').html(html);
+        });
+      });
+
+      function editarEmpleado(id) {
+        $.get('../php/obtener_empleado_por_id.php', { id_empleado: id }, function (data) {
+          const emp = JSON.parse(data);
+
+          $('#edit-id_empleado').val(emp.id_empleado);
+          $('#edit-nombre').val(emp.nombre);
+          $('#edit-apellido_pat').val(emp.apellido_pat);
+          $('#edit-apellido_mat').val(emp.apellido_mat);
+          $('#edit-telefono').val(emp.telefono);
+          $('#edit-rfc').val(emp.RFC);
+          $('#edit-correo').val(emp.correo);
+
+          const modal = new bootstrap.Modal(document.getElementById('modalEditarEmpleado'));
+          modal.show();
+        });
+      }
+
+      function eliminarEmpleado(id) {
+        if (confirm('¿Seguro que deseas eliminar este empleado?')) {
+          $.post('../php/eliminar_empleado.php', { id_empleado: id }, function (respuesta) {
+            alert(respuesta);
+            location.reload();
+          });
+        }
+      }
+
+      $('#formAgregarEmpleado').submit(function (e) {
+        e.preventDefault();
+
+        $.post('../php/registrar_empleado.php', $(this).serialize(), function (respuesta) {
+          alert(respuesta);
+          $('#modalAgregarEmpleado').modal('hide');
+          location.reload();
+        });
+      });
+
+      $('#formEditarEmpleado').submit(function (e) {
+        e.preventDefault();
+
+        $.post('../php/actualizar_empleado.php', $(this).serialize(), function (respuesta) {
+          alert(respuesta);
+          $('#modalEditarEmpleado').modal('hide');
+          location.reload();
+        });
+      });
+    </script>
+</script>
+
+      
+      
+  
+</body>
+</html>

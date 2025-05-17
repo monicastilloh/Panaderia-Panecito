@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <link rel="icon" type="image/png" href="..\img\2.png">
+    <link rel="stylesheet" href="..\CSS\estilo.css">
+    <title>Inventario - Administrador</title>
+    <style>
+        .stock-bajo {
+            background-color: #ffcccc !important;
+        }
+        .stock-optimo {
+            background-color: #ffe7cc !important;
+        }
+        .stock-exceso {
+            background-color: #ffffcc !important;
+        }
+    </style>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="..\img\logo.png" alt="logotipo" width="75" height="60"> 
+            <p>Pancito</p>
+        </div>
+            
+        <ul class="listp">
+            <li><a class="listpa" href="productos.html">Productos</a></li>
+            <li><a class="listpa" href="ventas.html">Venta</a></li>
+            <li><a class="listpa" href="informes.html" style="font-weight: bold">Inventario</a></li>
+            <li> <a class="listpa"  href="empleados.html" >Empleados</a>
+            </li>
+            <li><a class="listpa" href="eventos.html">Eventos</a></li>
+            <div class="dropdown">
+                <button class="dropbtn">Usuario ▼</button>
+                <div class="dropdown-content">
+                    <a href="..\Inicio\inicio.html">Cerrar sesión</a>
+                </div>
+            </div>
+        </ul>
+    </nav>
+</head>
+<body>
+    
+    <div class="container">
+        
+        
+    
+        
+
+        <div class ="cont" >
+         <div class="card">
+            <div class=" bg-success text-white">
+                <h5>Control de Materias Primas</h5>
+            </div>
+            <div class="card-body">
+                <div >
+                    <table id="tablaIngredientes" >
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Stock Disponible</th>
+                                <th>Mínimo</th>
+                                <th>Máximo</th>
+                                <th>Proveedor</th>
+                                <th>Lote</th>
+                                <th>Fecha de ingreso</th>
+                                <th>Fecha de caducidad</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpoTablaIngredientes">
+                            <!-- Datos se cargarán dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    
+        </div>
+      
+
+
+    <!-- Modal para gestionar materias primas -->
+    <div class="modal fade" id="ingredienteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalIngredienteTitle">Gestionar Materia Prima</h5>
+                    
+                </div>
+                <div class="modal-body">
+                    <form id="ingredienteForm">
+                        <input type="hidden" id="ingredienteId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nombreIngrediente" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombreIngrediente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="unidadMedida" class="form-label">Unidad de Medida</label>
+                                    <select class="form-select" id="unidadMedida" required>
+                                        <option value="kg">Kilogramos</option>
+                                        <option value="g">Gramos</option>
+                                        <option value="l">Litros</option>
+                                        <option value="ml">Mililitros</option>
+                                        <option value="unidad">Unidades</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="stockIngrediente" class="form-label">Stock Actual</label>
+                                    <input type="number" step="0.01" class="form-control" id="stockIngrediente" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="minimoIngrediente" class="form-label">Stock Mínimo</label>
+                                    <input type="number" step="0.01" class="form-control" id="minimoIngrediente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="maximoIngrediente" class="form-label">Stock Máximo</label>
+                                    <input type="number" step="0.01" class="form-control" id="maximoIngrediente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="proveedorIngrediente" class="form-label">Proveedor</label>
+                                    <input type="text" class="form-control" id="proveedorIngrediente" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="loteIngrediente" class="form-label">Número de Lote</label>
+                                    <input type="text" class="form-control" id="loteIngrediente" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fechaCaducidad" class="form-label">Fecha de Caducidad</label>
+                                    <input type="date" class="form-control" id="fechaCaducidad">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcionIngrediente" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcionIngrediente" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="guardarIngrediente">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para movimientos de inventario -->
+    <div class="modal fade" id="movimientoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Registrar Movimiento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="movimientoForm">
+                        <input type="hidden" id="movimientoId">
+                        <div class="mb-3">
+                            <label for="tipoMovimiento" class="form-label">Tipo de Movimiento</label>
+                            <select class="form-select" id="tipoMovimiento" required>
+                                <option value="entrada">Entrada</option>
+                                <option value="salida">Salida</option>
+                                <option value="ajuste">Ajuste</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidadMovimiento" class="form-label">Cantidad</label>
+                            <input type="number" step="0.01" class="form-control" id="cantidadMovimiento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comentarioMovimiento" class="form-label">Comentario</label>
+                            <textarea class="form-control" id="comentarioMovimiento" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="guardarMovimiento">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+    $(document).ready(function() {
+        // Inicializar DataTable
+        var tablaIngredientes = $('#tablaIngredientes').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-MX.json'
+            }
+        });
+
+
+
+        // Cargar materias primas
+        function cargarIngredientes() {
+            $.get('../php/obtener_ingredientes_inventario.php', function(data) {
+                const ingredientes = JSON.parse(data);
+                let html = '';
+                
+                ingredientes.forEach(ing => {
+                    // Determinar clase CSS según el nivel de stock
+                    let claseStock = '';
+                    if (ing.stock < ing.minimo) {
+                        claseStock = 'stock-bajo';
+                    } else if (ing.stock > ing.maximo) {
+                        claseStock = 'stock-exceso';
+                    } else {
+                        claseStock = 'stock-optimo';
+                    }
+                    
+                    html += `
+                    <tr class="${claseStock}">
+                        <td>${ing.nombre}</td>
+                        <td>${ing.stock} ${ing.unidad_medida}</td>
+                        <td>${ing.minimo} ${ing.unidad_medida}</td>
+                        <td>${ing.maximo} ${ing.unidad_medida}</td>
+                        <td>${ing.proveedor}</td>
+                        <td>${ing.lote}</td>
+                        <td>${ing.ingreso}</td>
+                        <td>${ing.caducidad}</td>
+                        <td>
+                            <button class="btn btn-sm " 
+                                data-id="${ing.id}"
+                                data-nombre="${ing.nombre}"
+                                data-unidad="${ing.unidad_medida}"
+                                data-stock="${ing.stock}"
+                                data-minimo="${ing.minimo}"
+                                data-maximo="${ing.maximo}"
+                                data-proveedor="${ing.proveedor}"
+                                data-lote="${ing.lote}"
+                                data-caducidad="${ing.fecha_caducidad}"
+                                data-descripcion="${ing.descripcion}">
+                                <i class="fas fa-edit"></i> 
+                            </button>
+                            
+                        </td>
+                    </tr>`;
+                });
+                
+                $('#cuerpoTablaIngredientes').html(html);
+            });
+        }
+
+        // Cargar datos iniciales
+        cargarIngredientes();
+
+        // Nuevo ingrediente
+        $('#nuevoIngrediente').click(function() {
+            $('#ingredienteForm')[0].reset();
+            $('#ingredienteId').val('');
+            $('#modalIngredienteTitle').text('Nueva Materia Prima');
+            $('#ingredienteModal').modal('show');
+        });
+
+        // Editar ingrediente
+        $(document).on('click', '.editar-ingrediente', function() {
+            const id = $(this).data('id');
+            const nombre = $(this).data('nombre');
+            const unidad = $(this).data('unidad');
+            const stock = $(this).data('stock');
+            const minimo = $(this).data('minimo');
+            const maximo = $(this).data('maximo');
+            const proveedor = $(this).data('proveedor');
+            const lote = $(this).data('lote');
+            const caducidad = $(this).data('caducidad');
+            const descripcion = $(this).data('descripcion');
+            
+            $('#ingredienteId').val(id);
+            $('#nombreIngrediente').val(nombre);
+            $('#unidadMedida').val(unidad);
+            $('#stockIngrediente').val(stock);
+            $('#minimoIngrediente').val(minimo);
+            $('#maximoIngrediente').val(maximo);
+            $('#proveedorIngrediente').val(proveedor);
+            $('#loteIngrediente').val(lote);
+            $('#fechaCaducidad').val(caducidad);
+            $('#descripcionIngrediente').val(descripcion);
+            
+            $('#modalIngredienteTitle').text('Editar Materia Prima');
+            $('#ingredienteModal').modal('show');
+        });
+
+        // Registrar movimiento
+        $(document).on('click', '.movimiento-ingrediente', function() {
+            const id = $(this).data('id');
+            const nombre = $(this).data('nombre');
+            
+            $('#movimientoId').val(id);
+            $('#movimientoModal .modal-title').text(`Registrar Movimiento - ${nombre}`);
+            $('#movimientoForm')[0].reset();
+            $('#movimientoModal').modal('show');
+        });
+
+        // Guardar ingrediente
+        $('#guardarIngrediente').click(function() {
+            const formData = {
+                id: $('#ingredienteId').val(),
+                nombre: $('#nombreIngrediente').val(),
+                unidad_medida: $('#unidadMedida').val(),
+                cantidad: $('#stockIngrediente').val(),
+                minimo: $('#minimoIngrediente').val(),
+                maximo: $('#maximoIngrediente').val(),
+                proveedor: $('#proveedorIngrediente').val(),
+                lote: $('#loteIngrediente').val(),
+                fecha_caducidad: $('#fechaCaducidad').val(),
+                descripcion: $('#descripcionIngrediente').val()
+            };
+            
+            $.post('../php/gestionar_ingrediente.php', formData, function(response) {
+                const res = JSON.parse(response);
+                if (res.success) {
+                    alert(res.message);
+                    $('#ingredienteModal').modal('hide');
+                    cargarIngredientes();
+                } else {
+                    alert('Error: ' + res.message);
+                }
+            });
+        });
+
+        // Guardar movimiento
+        $('#guardarMovimiento').click(function() {
+            const movimientoData = {
+                ingrediente_id: $('#movimientoId').val(),
+                tipo: $('#tipoMovimiento').val(),
+                cantidad: $('#cantidadMovimiento').val(),
+                comentario: $('#comentarioMovimiento').val()
+            };
+            
+            $.post('../php/registrar_movimiento.php', movimientoData, function(response) {
+                const res = JSON.parse(response);
+                if (res.success) {
+                    alert(res.message);
+                    $('#movimientoModal').modal('hide');
+                    cargarIngredientes();
+                } else {
+                    alert('Error: ' + res.message);
+                }
+            });
+        });
+
+        // Filtro de búsqueda
+        $('#buscador').on('keyup', function() {
+            tablaIngredientes.search($(this).val()).draw();
+        });
+    });
+    </script>
+</body>
+</html>
